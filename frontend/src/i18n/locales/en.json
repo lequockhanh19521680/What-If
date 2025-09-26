@@ -1,0 +1,72 @@
+{
+  "app": {
+    "title": "What If Studio",
+    "description": "AI-powered creative scenario generator",
+    "tagline": "Transform your creative hypotheses into logical, scientifically-grounded scenarios"
+  },
+  "navigation": {
+    "home": "Home",
+    "projects": "My Projects",
+    "about": "About",
+    "signIn": "Sign In",
+    "signOut": "Sign Out"
+  },
+  "hero": {
+    "title": "What If Studio",
+    "subtitle": "Transform Your Creative Ideas",
+    "description": "Use AI to convert creative hypotheses into logical, scientifically-grounded scenarios with multimedia content",
+    "cta": "Start Creating",
+    "features": {
+      "ai": "Smart AI Analysis",
+      "multimedia": "Auto-Generated Content",
+      "sharing": "Easy Sharing"
+    }
+  },
+  "generator": {
+    "title": "Create Your Scenario",
+    "placeholder": "What if gravity was twice as strong on Earth?",
+    "placeholderVi": "Điều gì sẽ xảy ra nếu trọng lực trên Trái Đất mạnh gấp đôi?",
+    "generate": "Generate Content",
+    "generating": "Creating your scenario...",
+    "steps": {
+      "analyzing": "Analyzing your hypothesis...",
+      "creating": "Creating scenario...",
+      "images": "Generating images...",
+      "video": "Creating video...",
+      "finishing": "Finalizing..."
+    }
+  },
+  "project": {
+    "scenario": "Scenario",
+    "analysis": "Scientific Analysis",
+    "images": "Generated Images",
+    "video": "Video Slideshow",
+    "share": "Share This Project"
+  },
+  "sharing": {
+    "title": "Share Your Creation",
+    "facebook": "Share on Facebook",
+    "twitter": "Share on Twitter",
+    "reddit": "Share on Reddit",
+    "copyLink": "Copy Link",
+    "linkCopied": "Link copied to clipboard!"
+  },
+  "auth": {
+    "signInTitle": "Sign In to Continue",
+    "signInDescription": "Get unlimited access to What If Studio",
+    "freeLimit": "You've used your 5 free generations",
+    "benefits": {
+      "unlimited": "Unlimited generations",
+      "history": "Project history",
+      "priority": "Priority processing"
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "generation": "Failed to generate content. Please try again.",
+    "notFound": "Project not found."
+  },
+  "loading": "Loading...",
+  "retry": "Retry"
+}

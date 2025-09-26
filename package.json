@@ -1,0 +1,17 @@
+{
+  "name": "what-if-studio",
+  "version": "1.0.0",
+  "description": "AI-powered creative scenario generator with multimedia content",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run dev:frontend & npm run dev:backend",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "deploy": "cd backend && npm run deploy",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install"
+  },
+  "keywords": ["ai", "content-generation", "aws", "multimedia"],
+  "author": "What If Studio Team",
+  "license": "MIT"
+}

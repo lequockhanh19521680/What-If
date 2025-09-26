@@ -1,0 +1,29 @@
+{
+  "name": "what-if-studio-backend",
+  "version": "1.0.0",
+  "description": "Backend API for What If Studio",
+  "main": "handler.js",
+  "scripts": {
+    "dev": "serverless offline start",
+    "deploy": "serverless deploy",
+    "logs": "serverless logs -f",
+    "remove": "serverless remove"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.450.0",
+    "@aws-sdk/client-s3": "^3.450.0",
+    "@aws-sdk/client-dynamodb": "^3.450.0",
+    "@aws-sdk/util-dynamodb": "^3.450.0",
+    "aws-lambda": "^1.0.7",
+    "uuid": "^9.0.1",
+    "sharp": "^0.32.6",
+    "ffmpeg-static": "^5.2.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "serverless": "^3.36.0",
+    "serverless-offline": "^13.3.0",
+    "serverless-dotenv-plugin": "^6.0.0"
+  }
+}
