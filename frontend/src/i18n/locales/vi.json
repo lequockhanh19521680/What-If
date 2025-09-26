@@ -1,0 +1,72 @@
+{
+  "app": {
+    "title": "What If Studio",
+    "description": "Ứng dụng tạo kịch bản sáng tạo bằng AI",
+    "tagline": "Chuyển đổi các giả định sáng tạo thành kịch bản logic, có cơ sở khoa học"
+  },
+  "navigation": {
+    "home": "Trang chủ",
+    "projects": "Dự án của tôi",
+    "about": "Giới thiệu",
+    "signIn": "Đăng nhập",
+    "signOut": "Đăng xuất"
+  },
+  "hero": {
+    "title": "What If Studio",
+    "subtitle": "Biến Ý Tưởng Thành Hiện Thực",
+    "description": "Sử dụng AI để chuyển đổi giả định sáng tạo thành kịch bản logic, có cơ sở khoa học với nội dung đa phương tiện",
+    "cta": "Bắt Đầu Tạo",
+    "features": {
+      "ai": "Phân Tích AI Thông Minh",
+      "multimedia": "Nội Dung Tự Động",
+      "sharing": "Chia Sẻ Dễ Dàng"
+    }
+  },
+  "generator": {
+    "title": "Tạo Kịch Bản Của Bạn",
+    "placeholder": "Điều gì sẽ xảy ra nếu trọng lực trên Trái Đất mạnh gấp đôi?",
+    "placeholderVi": "What if gravity was twice as strong on Earth?",
+    "generate": "Tạo Nội Dung",
+    "generating": "Đang tạo kịch bản của bạn...",
+    "steps": {
+      "analyzing": "Đang phân tích giả định...",
+      "creating": "Đang tạo kịch bản...",
+      "images": "Đang tạo hình ảnh...",
+      "video": "Đang tạo video...",
+      "finishing": "Đang hoàn thiện..."
+    }
+  },
+  "project": {
+    "scenario": "Kịch Bản",
+    "analysis": "Phân Tích Khoa Học",
+    "images": "Hình Ảnh Được Tạo",
+    "video": "Video Slideshow",
+    "share": "Chia Sẻ Dự Án"
+  },
+  "sharing": {
+    "title": "Chia Sẻ Tác Phẩm",
+    "facebook": "Chia sẻ lên Facebook",
+    "twitter": "Chia sẻ lên Twitter",
+    "reddit": "Chia sẻ lên Reddit",
+    "copyLink": "Sao chép liên kết",
+    "linkCopied": "Đã sao chép liên kết!"
+  },
+  "auth": {
+    "signInTitle": "Đăng Nhập Để Tiếp Tục",
+    "signInDescription": "Truy cập không giới hạn What If Studio",
+    "freeLimit": "Bạn đã sử dụng hết 5 lượt miễn phí",
+    "benefits": {
+      "unlimited": "Tạo không giới hạn",
+      "history": "Lịch sử dự án",
+      "priority": "Xử lý ưu tiên"
+    }
+  },
+  "errors": {
+    "generic": "Có lỗi xảy ra. Vui lòng thử lại.",
+    "network": "Lỗi mạng. Vui lòng kiểm tra kết nối.",
+    "generation": "Không thể tạo nội dung. Vui lòng thử lại.",
+    "notFound": "Không tìm thấy dự án."
+  },
+  "loading": "Đang tải...",
+  "retry": "Thử lại"
+}
