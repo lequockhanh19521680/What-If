@@ -68,5 +68,70 @@
     "notFound": "Không tìm thấy dự án."
   },
   "loading": "Đang tải...",
-  "retry": "Thử lại"
+  "retry": "Thử lại",
+  "about": {
+    "meta": {
+      "title": "Giới thiệu",
+      "description": "Tìm hiểu về What If Studio - nền tảng AI tạo kịch bản sáng tạo"
+    },
+    "hero": {
+      "title": "Giới Thiệu",
+      "subtitle": "Chúng tôi tin rằng mọi ý tưởng đều có thể trở thành hiện thực. What If Studio là nơi khoa học gặp gỡ sự sáng tạo.",
+      "cta": "Khám Phá Ngay",
+      "rating": "4.9/5 từ hàng nghìn người dùng"
+    },
+    "mission": {
+      "title": "Sứ Mệnh Của Chúng Tôi",
+      "description": "Mang đến cho mọi người khả năng biến những ý tưởng táo bạo nhất thành những kịch bản khoa học có thể hiện thực."
+    },
+    "features": {
+      "ai": {
+        "title": "Trí Tuệ Nhân Tạo Tiên Tiến",
+        "description": "Sử dụng AI hiện đại nhất để phân tích và tạo ra những kịch bản logic, có cơ sở khoa học."
+      },
+      "multimedia": {
+        "title": "Nội Dung Đa Phương Tiện",
+        "description": "Tự động tạo hình ảnh, video và nội dung tương tác để làm sống động kịch bản của bạn."
+      },
+      "sharing": {
+        "title": "Chia Sẻ Toàn Cầu",
+        "description": "Kết nối với cộng đồng sáng tạo trên toàn thế giới và chia sẻ ý tưởng của bạn."
+      }
+    },
+    "stats": {
+      "title": "Những Con Số Ấn Tượng",
+      "scenarios": "Kịch bản đã tạo",
+      "countries": "Quốc gia sử dụng",
+      "satisfaction": "Hài lòng",
+      "availability": "Hoạt động"
+    },
+    "vision": {
+      "title": "Tầm Nhìn Tương Lai",
+      "description": "Chúng tôi hình dung một thế giới nơi mọi người có thể khám phá những khả năng vô tận thông qua sức mạnh của AI và khoa học.",
+      "point1": "Dân chủ hóa việc tiếp cận công nghệ AI cho mọi người",
+      "point2": "Kết nối khoa học với sự sáng tạo hàng ngày",
+      "point3": "Xây dựng cộng đồng những người tư duy đổi mới"
+    },
+    "team": {
+      "title": "Đội Ngũ Của Chúng Tôi",
+      "subtitle": "Những chuyên gia đam mê công nghệ và sáng tạo, cùng nhau xây dựng tương lai.",
+      "ai": {
+        "role": "Nghiên Cứu AI",
+        "description": "Phát triển các thuật toán AI tiên tiến để hiểu và tạo ra nội dung sáng tạo."
+      },
+      "creative": {
+        "role": "Sáng Tạo Nội Dung",
+        "description": "Thiết kế trải nghiệm người dùng và tạo ra những nội dung hấp dẫn, có ý nghĩa."
+      },
+      "engineering": {
+        "role": "Kỹ Thuật Phần Mềm",
+        "description": "Xây dựng nền tảng mạnh mẽ, bảo mật và có thể mở rộng cho hàng triệu người dùng."
+      }
+    },
+    "cta": {
+      "title": "Sẵn Sàng Bắt Đầu?",
+      "description": "Tham gia cùng hàng nghìn người dùng đã tin tưởng What If Studio để biến ý tưởng thành hiện thực.",
+      "button": "Tạo Kịch Bản Đầu Tiên"
+    }
+  }
 }

@@ -68,5 +68,70 @@
     "notFound": "Project not found."
   },
   "loading": "Loading...",
-  "retry": "Retry"
+  "retry": "Retry",
+  "about": {
+    "meta": {
+      "title": "About",
+      "description": "Learn about What If Studio - AI-powered creative scenario platform"
+    },
+    "hero": {
+      "title": "About Us",
+      "subtitle": "We believe every idea can become reality. What If Studio is where science meets creativity.",
+      "cta": "Explore Now",
+      "rating": "4.9/5 from thousands of users"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "Empowering everyone to transform their boldest ideas into scientifically-grounded, achievable scenarios."
+    },
+    "features": {
+      "ai": {
+        "title": "Advanced Artificial Intelligence",
+        "description": "Using cutting-edge AI to analyze and create logical, scientifically-based scenarios."
+      },
+      "multimedia": {
+        "title": "Multimedia Content",
+        "description": "Automatically generate images, videos, and interactive content to bring your scenarios to life."
+      },
+      "sharing": {
+        "title": "Global Sharing",
+        "description": "Connect with a creative community worldwide and share your innovative ideas."
+      }
+    },
+    "stats": {
+      "title": "Impressive Numbers",
+      "scenarios": "Scenarios Created",
+      "countries": "Countries Served",
+      "satisfaction": "Satisfaction Rate",
+      "availability": "Uptime"
+    },
+    "vision": {
+      "title": "Future Vision",
+      "description": "We envision a world where everyone can explore infinite possibilities through the power of AI and science.",
+      "point1": "Democratizing AI technology access for everyone",
+      "point2": "Connecting science with everyday creativity",
+      "point3": "Building a community of innovative thinkers"
+    },
+    "team": {
+      "title": "Our Team",
+      "subtitle": "Passionate experts in technology and creativity, building the future together.",
+      "ai": {
+        "role": "AI Research",
+        "description": "Developing advanced AI algorithms to understand and create innovative content."
+      },
+      "creative": {
+        "role": "Creative Content",
+        "description": "Designing user experiences and creating engaging, meaningful content."
+      },
+      "engineering": {
+        "role": "Software Engineering",
+        "description": "Building robust, secure, and scalable platforms for millions of users."
+      }
+    },
+    "cta": {
+      "title": "Ready to Start?",
+      "description": "Join thousands of users who trust What If Studio to turn their ideas into reality.",
+      "button": "Create Your First Scenario"
+    }
+  }
 }

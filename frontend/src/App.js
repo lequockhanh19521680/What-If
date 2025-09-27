@@ -6,6 +6,7 @@ import { AuthProvider } from './hooks/useAuth';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import ProjectPage from './pages/ProjectPage';
+import AboutPage from './pages/AboutPage';
 import './i18n';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,6 +21,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/project/:projectId" element={<ProjectPage />} />
+                <Route path="/about" element={<AboutPage />} />
               </Routes>
             </main>
             <ToastContainer

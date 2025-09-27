@@ -29,6 +29,9 @@ module.exports = {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.3s ease-out',
         'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in-up': 'fadeInUp 1s ease-out',
+        'float': 'float 3s ease-in-out infinite',
+        'bounce-slow': 'bounce 2s infinite',
       },
       keyframes: {
         fadeIn: {
@@ -38,6 +41,14 @@ module.exports = {
         slideUp: {
           '0%': { transform: 'translateY(10px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(30px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
         }
       }
     },

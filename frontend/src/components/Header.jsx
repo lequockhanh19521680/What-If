@@ -1,11 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Globe, User, LogOut } from 'lucide-react';
 
 const Header = () => {
   const { t, i18n } = useTranslation();
   const { user, signOut } = useAuth();
+  const location = useLocation();
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'vi' : 'en';
@@ -17,28 +19,42 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
             <div className="gradient-bg text-white rounded-lg p-2 mr-3">
               <span className="font-bold text-lg">WI</span>
             </div>
             <h1 className="text-xl font-bold text-gray-900">
               {t('app.title')}
             </h1>
-          </div>
+          </Link>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#home" className="text-gray-700 hover:text-primary-600 transition-colors">
+            <Link 
+              to="/" 
+              className={`transition-colors ${
+                location.pathname === '/' 
+                  ? 'text-primary-600 font-medium' 
+                  : 'text-gray-700 hover:text-primary-600'
+              }`}
+            >
               {t('navigation.home')}
-            </a>
+            </Link>
             {user && (
               <a href="#projects" className="text-gray-700 hover:text-primary-600 transition-colors">
                 {t('navigation.projects')}
               </a>
             )}
-            <a href="#about" className="text-gray-700 hover:text-primary-600 transition-colors">
+            <Link 
+              to="/about" 
+              className={`transition-colors ${
+                location.pathname === '/about' 
+                  ? 'text-primary-600 font-medium' 
+                  : 'text-gray-700 hover:text-primary-600'
+              }`}
+            >
               {t('navigation.about')}
-            </a>
+            </Link>
           </nav>
 
           {/* Right side controls */}
@@ -77,6 +93,11 @@ const Header = () => {
                 {t('navigation.signIn')}
               </button>
             )}
+          </div>
+
+          {/* Mobile menu button - placeholder for future mobile nav */}
+          <div className="md:hidden">
+            {/* This can be expanded later for mobile navigation */}
           </div>
         </div>
       </div>
