@@ -1,6 +1,6 @@
 service: what-if-studio-backend
 
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
@@ -29,7 +29,7 @@ provider:
             - s3:PutObject
             - s3:DeleteObject
             - s3:PutObjectAcl
-          Resource: 
+          Resource:
             - "arn:aws:s3:::${self:provider.environment.MEDIA_BUCKET}"
             - "arn:aws:s3:::${self:provider.environment.MEDIA_BUCKET}/*"
         - Effect: Allow
@@ -154,7 +154,9 @@ resources:
               Effect: Allow
               Principal: "*"
               Action: s3:GetObject
-              Resource: !Sub "${MediaBucket}/*"
+              Resource:
+                - !GetAtt MediaBucket.Arn
+                - !Sub "${MediaBucket.Arn}/*"
 
     CognitoUserPool:
       Type: AWS::Cognito::UserPool
@@ -172,8 +174,39 @@ resources:
             RequireNumbers: true
             RequireSymbols: false
 
+    CognitoGoogleIdentityProvider:
+      Type: AWS::Cognito::UserPoolIdentityProvider
+      Properties:
+        ProviderName: Google
+        ProviderType: Google
+        UserPoolId: !Ref CognitoUserPool
+        ProviderDetails:
+          client_id: ${ssm:/what-if/google-client-id}
+          client_secret: ${ssm:/what-if/google-client-secret}
+          authorize_scopes: "openid email profile"
+        AttributeMapping:
+          email: email
+          username: sub
+
+    CognitoFacebookIdentityProvider:
+      Type: AWS::Cognito::UserPoolIdentityProvider
+      Properties:
+        ProviderName: Facebook
+        ProviderType: Facebook
+        UserPoolId: !Ref CognitoUserPool
+        ProviderDetails:
+          client_id: ${ssm:/what-if/facebook-client-id}
+          client_secret: ${ssm:/what-if/facebook-client-secret}
+          authorize_scopes: "email public_profile"
+        AttributeMapping:
+          email: email
+          username: id
+
     CognitoUserPoolClient:
       Type: AWS::Cognito::UserPoolClient
+      DependsOn:
+        - CognitoGoogleIdentityProvider
+        - CognitoFacebookIdentityProvider
       Properties:
         ClientName: ${self:service}-user-pool-client-${self:provider.stage}
         UserPoolId: !Ref CognitoUserPool
@@ -215,3 +248,14 @@ resources:
       Value: !Ref CognitoUserPoolClient
       Export:
         Name: ${self:service}-${self:provider.stage}-user-pool-client-id
+
+package:
+  exclude:
+    - node_modules/**
+    - docs/**
+    - test/**
+    - .git/**
+    - .env
+    - .env.example
+    - frontend/**
+    - README.md
