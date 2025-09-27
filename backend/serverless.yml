@@ -15,6 +15,7 @@ provider:
     USERS_TABLE: ${self:service}-users-${self:provider.stage}
     MEDIA_BUCKET: ${self:service}-media-${self:provider.stage}
     BEDROCK_REGION: us-east-1
+    BEDROCK_MODEL_ID: anthropic.claude-sonnet-4-20250514-v1:0
   iam:
     role:
       statements:
@@ -22,7 +23,9 @@ provider:
           Action:
             - bedrock:InvokeModel
             - bedrock:ListFoundationModels
-          Resource: "*"
+            - bedrock:InvokeModelWithResponseStream
+          Resource:
+            - arn:aws:bedrock:us-east-1::foundation-model/*
         - Effect: Allow
           Action:
             - s3:GetObject
@@ -48,6 +51,12 @@ plugins:
   - serverless-offline
   - serverless-dotenv-plugin
 
+layers:
+  nodeModules:
+    path: layers
+    compatibleRuntimes:
+      - nodejs18.x
+
 functions:
   generateContent:
     handler: handlers/generateContent.handler
@@ -55,8 +64,18 @@ functions:
       - http:
           path: /api/generate
           method: post
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
     layers:
+      - { Ref: NodeModulesLambdaLayer }
       - arn:aws:lambda:${self:provider.region}:580247275435:layer:LambdaInsightsExtension:14
 
   getProject:
@@ -65,7 +84,18 @@ functions:
       - http:
           path: /api/project/{projectId}
           method: get
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
 
   getUserProjects:
     handler: handlers/getUserProjects.handler
@@ -73,7 +103,18 @@ functions:
       - http:
           path: /api/user/{userId}/projects
           method: get
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
 
   createShareLink:
     handler: handlers/createShareLink.handler
@@ -81,7 +122,18 @@ functions:
       - http:
           path: /api/share
           method: post
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
 
 resources:
   Resources:
