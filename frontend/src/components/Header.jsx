@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Globe, User, LogOut } from 'lucide-react';
+import AuthModal from './AuthModal';
 
 const Header = () => {
   const { t, i18n } = useTranslation();
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'vi' : 'en';
     i18n.changeLanguage(newLang);
+  };
+
+  const handleSignInClick = () => {
+    setShowAuthModal(true);
+  };
+
+  const handleHomeClick = () => {
+    navigate('/');
+  };
+
+  const handleAboutClick = () => {
+    navigate('/about');
+  };
+
+  const handleProjectsClick = () => {
+    navigate('/projects');
   };
 
   return (
@@ -28,17 +49,23 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#home" className="text-gray-700 hover:text-primary-600 transition-colors">
+            <button 
+              onClick={handleHomeClick}
+              className="text-gray-700 hover:text-primary-600 transition-colors">
               {t('navigation.home')}
-            </a>
+            </button>
             {user && (
-              <a href="#projects" className="text-gray-700 hover:text-primary-600 transition-colors">
+              <button 
+                onClick={handleProjectsClick}
+                className="text-gray-700 hover:text-primary-600 transition-colors">
                 {t('navigation.projects')}
-              </a>
+              </button>
             )}
-            <a href="#about" className="text-gray-700 hover:text-primary-600 transition-colors">
+            <button 
+              onClick={handleAboutClick}
+              className="text-gray-700 hover:text-primary-600 transition-colors">
               {t('navigation.about')}
-            </a>
+            </button>
           </nav>
 
           {/* Right side controls */}
@@ -73,13 +100,21 @@ const Header = () => {
                 </button>
               </div>
             ) : (
-              <button className="btn-secondary text-sm">
+              <button 
+                onClick={handleSignInClick}
+                className="btn-secondary text-sm">
                 {t('navigation.signIn')}
               </button>
             )}
           </div>
         </div>
       </div>
+
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
     </header>
   );
 };

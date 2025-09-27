@@ -6,6 +6,8 @@ import { AuthProvider } from './hooks/useAuth';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import ProjectPage from './pages/ProjectPage';
+import AboutPage from './pages/AboutPage';
+import ProjectsPage from './pages/ProjectsPage';
 import './i18n';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -19,6 +21,8 @@ function App() {
             <main>
               <Routes>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/projects" element={<ProjectsPage />} />
                 <Route path="/project/:projectId" element={<ProjectPage />} />
               </Routes>
             </main>

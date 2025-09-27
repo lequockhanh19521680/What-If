@@ -31,11 +31,10 @@ class ApiService {
     );
   }
 
-  async generateContent(prompt, language = 'en', userId = null) {
+  async generateContent(prompt, userId = null) {
     try {
       const response = await this.client.post('/generate', {
         prompt,
-        language,
         userId
       });
       return response.data;
@@ -74,6 +73,33 @@ class ApiService {
         projectId,
         platform
       });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteProject(projectId) {
+    try {
+      const response = await this.client.delete(`/project/${projectId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async starProject(projectId) {
+    try {
+      const response = await this.client.post(`/project/${projectId}/star`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async unstarProject(projectId) {
+    try {
+      const response = await this.client.delete(`/project/${projectId}/star`);
       return response.data;
     } catch (error) {
       throw error;

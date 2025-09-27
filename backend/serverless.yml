@@ -19,6 +19,12 @@ provider:
     MEDIA_BUCKET: ${self:service}-media-${self:provider.stage}
     BEDROCK_REGION: us-east-1
     BEDROCK_MODEL_ID: anthropic.claude-3-sonnet-20240229-v1:0
+    RDS_HOST: ${ssm:/what-if/rds-host}
+    RDS_PORT: ${ssm:/what-if/rds-port, '3306'}
+    RDS_USER: ${ssm:/what-if/rds-user}
+    RDS_PASSWORD: ${ssm:/what-if/rds-password}
+    RDS_DATABASE: ${ssm:/what-if/rds-database}
+    JWT_SECRET: ${ssm:/what-if/jwt-secret}
   iam:
     role:
       statements:
@@ -138,6 +144,85 @@ functions:
             allowCredentials: false
     layers:
       - { Ref: NodeModulesLambdaLayer }
+
+  # Auth functions
+  signUp:
+    handler: handlers/auth.signUp
+    events:
+      - http:
+          path: /api/auth/signup
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
+
+  signIn:
+    handler: handlers/auth.signIn
+    events:
+      - http:
+          path: /api/auth/signin
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
+
+  getCurrentUser:
+    handler: handlers/auth.getCurrentUser
+    events:
+      - http:
+          path: /api/auth/me
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
+
+  resetPassword:
+    handler: handlers/auth.resetPassword
+    events:
+      - http:
+          path: /api/auth/reset-password
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
+
+  confirmResetPassword:
+    handler: handlers/auth.confirmResetPassword
+    events:
+      - http:
+          path: /api/auth/confirm-reset
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
+
+  signOut:
+    handler: handlers/auth.signOut
+    events:
+      - http:
+          path: /api/auth/signout
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
 
 resources:
   Resources:

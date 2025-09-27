@@ -50,12 +50,32 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const resetPassword = async (email) => {
+    try {
+      const result = await authService.resetPassword(email);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const confirmResetPassword = async (email, verificationCode, newPassword) => {
+    try {
+      const result = await authService.confirmResetPassword(email, verificationCode, newPassword);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const value = {
     user,
     loading,
     signIn,
     signUp,
     signOut,
+    resetPassword,
+    confirmResetPassword,
     checkUser
   };
 

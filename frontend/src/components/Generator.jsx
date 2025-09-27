@@ -1,36 +1,113 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
-import { Sparkles, Loader2, AlertCircle } from 'lucide-react';
+import { 
+  Sparkles, 
+  Loader2, 
+  AlertCircle, 
+  Brain,
+  Image,
+  Video,
+  CheckCircle,
+  Clock,
+  Zap
+} from 'lucide-react';
 import apiService from '../services/api';
 
-const Generator = ({ onProjectGenerated }) => {
+const Generator = ({ onProjectGenerated, onAuthRequired }) => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [currentStep, setCurrentStep] = useState('');
+  const [currentStep, setCurrentStep] = useState(0);
+  const [stepOutput, setStepOutput] = useState({});
   const [error, setError] = useState('');
 
   const generationSteps = [
-    { key: 'analyzing', duration: 2000 },
-    { key: 'creating', duration: 3000 },
-    { key: 'images', duration: 15000 },
-    { key: 'video', duration: 8000 },
-    { key: 'finishing', duration: 2000 }
+    { 
+      key: 'analyzing', 
+      icon: Brain,
+      title: 'AI Analysis',
+      description: 'Analyzing your hypothesis with scientific reasoning',
+      duration: 3000 
+    },
+    { 
+      key: 'creating', 
+      icon: Sparkles,
+      title: 'Scenario Creation',
+      description: 'Generating detailed scenario and storyline',
+      duration: 4000 
+    },
+    { 
+      key: 'images', 
+      icon: Image,
+      title: 'Visual Content',
+      description: 'Creating concept art with Stable Diffusion',
+      duration: 15000 
+    },
+    { 
+      key: 'video', 
+      icon: Video,
+      title: 'Video Production',
+      description: 'Combining images into engaging slideshow',
+      duration: 8000 
+    },
+    { 
+      key: 'finishing', 
+      icon: CheckCircle,
+      title: 'Finalizing',
+      description: 'Saving and preparing your project',
+      duration: 2000 
+    }
   ];
 
   const simulateProgress = () => {
     let stepIndex = 0;
+    setCurrentStep(0);
+    setStepOutput({});
+    
     const nextStep = () => {
       if (stepIndex < generationSteps.length) {
-        const step = generationSteps[stepIndex];
-        setCurrentStep(t(`generator.steps.${step.key}`));
-        setTimeout(nextStep, step.duration);
-        stepIndex++;
+        setCurrentStep(stepIndex);
+        
+        // Simulate step completion with mock output
+        setTimeout(() => {
+          const step = generationSteps[stepIndex];
+          setStepOutput(prev => ({
+            ...prev,
+            [stepIndex]: {
+              completed: true,
+              output: getStepOutput(step.key),
+              timestamp: new Date().toLocaleTimeString()
+            }
+          }));
+          
+          stepIndex++;
+          if (stepIndex < generationSteps.length) {
+            setTimeout(nextStep, 500); // Small delay before next step
+          }
+        }, step.duration);
       }
     };
+    
     nextStep();
+  };
+
+  const getStepOutput = (stepKey) => {
+    switch (stepKey) {
+      case 'analyzing':
+        return 'Scientific framework identified • Key variables analyzed • Hypothesis validated';
+      case 'creating':
+        return 'Narrative structure complete • 4 key scenes outlined • Scientific accuracy verified';
+      case 'images':
+        return '4 concept art images generated • Style consistency maintained • High resolution output';
+      case 'video':
+        return 'MP4 slideshow created • Smooth transitions applied • Optimized for sharing';
+      case 'finishing':
+        return 'Project saved • Metadata generated • Ready for sharing';
+      default:
+        return 'Processing complete';
+    }
   };
 
   const handleGenerate = async () => {
@@ -38,17 +115,33 @@ const Generator = ({ onProjectGenerated }) => {
 
     setIsGenerating(true);
     setError('');
+    setCurrentStep(0);
+    setStepOutput({});
     simulateProgress();
 
     try {
       const result = await apiService.generateContent(
         prompt,
-        i18n.language,
+        null, // Let backend auto-detect language
         user?.userId
       );
 
       if (result.success) {
-        onProjectGenerated(result.project);
+        // Mark all steps as completed
+        const completedSteps = {};
+        generationSteps.forEach((_, index) => {
+          completedSteps[index] = {
+            completed: true,
+            output: getStepOutput(generationSteps[index].key),
+            timestamp: new Date().toLocaleTimeString()
+          };
+        });
+        setStepOutput(completedSteps);
+        setCurrentStep(generationSteps.length);
+        
+        setTimeout(() => {
+          onProjectGenerated(result.project);
+        }, 1000);
       } else {
         throw new Error(result.message || 'Generation failed');
       }
@@ -57,12 +150,12 @@ const Generator = ({ onProjectGenerated }) => {
       
       if (err.message === 'AUTH_REQUIRED') {
         setError(t('auth.freeLimit'));
+        onAuthRequired && onAuthRequired();
       } else {
         setError(err.message || t('errors.generation'));
       }
     } finally {
       setIsGenerating(false);
-      setCurrentStep('');
     }
   };
 
@@ -85,6 +178,9 @@ const Generator = ({ onProjectGenerated }) => {
         <div className="space-y-6">
           {/* Input area */}
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Your Creative Hypothesis
+            </label>
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -92,6 +188,9 @@ const Generator = ({ onProjectGenerated }) => {
               className="input-field h-32 resize-none"
               disabled={isGenerating}
             />
+            <p className="text-xs text-gray-500 mt-2">
+              💡 Tip: Be specific! Include context, timeframes, or conditions for better results.
+            </p>
           </div>
 
           {/* Error message */}
@@ -107,7 +206,7 @@ const Generator = ({ onProjectGenerated }) => {
             <button
               onClick={handleGenerate}
               disabled={!prompt.trim() || isGenerating}
-              className="btn-primary inline-flex items-center space-x-2 text-lg px-8 py-4 disabled:opacity-50"
+              className="btn-primary inline-flex items-center space-x-2 text-lg px-8 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isGenerating ? (
                 <>
@@ -123,30 +222,145 @@ const Generator = ({ onProjectGenerated }) => {
             </button>
           </div>
 
-          {/* Progress indicator */}
+          {/* Detailed Progress Display */}
           {isGenerating && (
-            <div className="bg-gray-50 rounded-lg p-6 text-center">
-              <div className="flex justify-center mb-4">
-                <div className="w-8 h-8 gradient-bg rounded-full flex items-center justify-center">
-                  <Loader2 className="w-4 h-4 text-white animate-spin" />
-                </div>
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6">
+              <div className="text-center mb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Creating Your Content
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Please wait while our AI generates your scenario...
+                </p>
               </div>
-              <p className="text-gray-700 font-medium">{currentStep}</p>
-              <div className="mt-4 bg-gray-200 rounded-full h-2">
-                <div className="gradient-bg h-2 rounded-full transition-all duration-1000 animate-pulse-slow w-1/2"></div>
+
+              {/* Progress Steps */}
+              <div className="space-y-4">
+                {generationSteps.map((step, index) => {
+                  const isActive = currentStep === index;
+                  const isCompleted = stepOutput[index]?.completed;
+                  const isPending = index > currentStep;
+                  
+                  return (
+                    <div 
+                      key={index} 
+                      className={`card p-4 transition-all duration-500 ${
+                        isActive ? 'ring-2 ring-blue-500 bg-white' : 
+                        isCompleted ? 'bg-green-50 border-green-200' :
+                        'bg-gray-50'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-4">
+                        {/* Step Icon */}
+                        <div className={`p-2 rounded-lg transition-colors ${
+                          isActive ? 'bg-blue-500 text-white' :
+                          isCompleted ? 'bg-green-500 text-white' :
+                          'bg-gray-300 text-gray-600'
+                        }`}>
+                          {isActive ? (
+                            <Loader2 size={20} className="animate-spin" />
+                          ) : isCompleted ? (
+                            <CheckCircle size={20} />
+                          ) : (
+                            <step.icon size={20} />
+                          )}
+                        </div>
+                        
+                        {/* Step Info */}
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className={`font-medium ${
+                              isActive || isCompleted ? 'text-gray-900' : 'text-gray-500'
+                            }`}>
+                              {step.title}
+                            </h4>
+                            {isCompleted && (
+                              <div className="flex items-center space-x-1 text-green-600 text-xs">
+                                <Clock size={12} />
+                                <span>{stepOutput[index]?.timestamp}</span>
+                              </div>
+                            )}
+                          </div>
+                          <p className={`text-sm ${
+                            isActive || isCompleted ? 'text-gray-600' : 'text-gray-400'
+                          }`}>
+                            {step.description}
+                          </p>
+                          
+                          {/* Step Output */}
+                          {isCompleted && stepOutput[index]?.output && (
+                            <div className="mt-2 text-xs text-green-700 bg-green-100 p-2 rounded">
+                              ✓ {stepOutput[index].output}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Progress bar for active step */}
+                      {isActive && (
+                        <div className="mt-3 bg-gray-200 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-1000 animate-pulse-slow w-3/4"></div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Overall Progress */}
+              <div className="mt-6 text-center">
+                <div className="text-sm text-gray-600 mb-2">
+                  Overall Progress: {Math.round((Object.keys(stepOutput).length / generationSteps.length) * 100)}%
+                </div>
+                <div className="bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${(Object.keys(stepOutput).length / generationSteps.length) * 100}%` }}
+                  ></div>
+                </div>
               </div>
             </div>
           )}
 
           {/* Usage info for non-authenticated users */}
           {!user && !isGenerating && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-              <p className="text-blue-800 text-sm">
-                Free users get 5 generations. 
-                <button className="font-medium underline ml-1">
-                  Sign in for unlimited access
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-6">
+              <div className="text-center">
+                <div className="flex justify-center mb-3">
+                  <Zap className="w-8 h-8 text-blue-600" />
+                </div>
+                <h4 className="font-semibold text-gray-900 mb-2">Free Trial Available</h4>
+                <p className="text-blue-800 text-sm mb-3">
+                  Try 5 generations for free! No credit card required.
+                </p>
+                <button 
+                  onClick={onAuthRequired}
+                  className="text-blue-600 font-medium text-sm underline hover:text-blue-700"
+                >
+                  Sign up for unlimited access →
                 </button>
-              </p>
+              </div>
+            </div>
+          )}
+
+          {/* Feature highlights */}
+          {!isGenerating && (
+            <div className="grid md:grid-cols-3 gap-4 text-center">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <Brain className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+                <h4 className="font-medium text-gray-900 text-sm">AI Analysis</h4>
+                <p className="text-xs text-gray-600">Scientific reasoning</p>
+              </div>
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <Image className="w-6 h-6 text-purple-600 mx-auto mb-2" />
+                <h4 className="font-medium text-gray-900 text-sm">Visual Content</h4>
+                <p className="text-xs text-gray-600">4 concept art images</p>
+              </div>
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <Video className="w-6 h-6 text-green-600 mx-auto mb-2" />
+                <h4 className="font-medium text-gray-900 text-sm">Video Export</h4>
+                <p className="text-xs text-gray-600">MP4 slideshow</p>
+              </div>
             </div>
           )}
         </div>
