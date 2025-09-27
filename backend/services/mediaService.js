@@ -62,7 +62,7 @@ class MediaService {
     return Promise.all(uploadPromises);
   }
 
-  async createVideoSlideshow(imageUrls, projectId, duration = 2) {
+  async createVideoSlideshow(imageUrls, projectId, duration = 3) {
     return new Promise(async (resolve, reject) => {
       try {
         if (!imageUrls || !Array.isArray(imageUrls) || imageUrls.length === 0) {
@@ -89,21 +89,41 @@ class MediaService {
           imagePaths.push(imagePath);
         }
 
-        // Create video slideshow
+        // Create enhanced video slideshow with transitions
         const command = ffmpeg();
 
-        // Add images with duration
-        imagePaths.forEach((imagePath, index) => {
-          command.input(imagePath).loop(duration * 25); // 25 fps
-        });
+        // Create a filter complex for smooth transitions
+        let filterComplex = '';
+        let inputs = '';
+        
+        for (let i = 0; i < imagePaths.length; i++) {
+          command.input(imagePaths[i]);
+          inputs += `[${i}:v]`;
+          
+          // Scale and pad each image to ensure consistent dimensions
+          filterComplex += `[${i}:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,setpts=PTS-STARTPTS[v${i}];`;
+        }
+        
+        // Add crossfade transitions between images
+        if (imagePaths.length > 1) {
+          let concat = `[v0]`;
+          for (let i = 1; i < imagePaths.length; i++) {
+            concat += `[v${i}]`;
+          }
+          filterComplex += `${concat}concat=n=${imagePaths.length}:v=1:a=0,format=yuv420p[outv]`;
+        } else {
+          filterComplex += `[v0]format=yuv420p[outv]`;
+        }
 
         command
-          .inputOptions(["-framerate 25", `-t ${duration * imageUrls.length}`])
+          .complexFilter(filterComplex)
           .outputOptions([
-            "-c:v libx264",
-            "-pix_fmt yuv420p",
-            "-crf 23",
-            "-preset medium",
+            '-map [outv]',
+            '-c:v libx264',
+            '-preset slow',
+            '-crf 18',
+            '-movflags +faststart',
+            `-t ${duration * imageUrls.length}`
           ])
           .output(outputPath)
           .on("end", async () => {

@@ -10,9 +10,24 @@ class AIService {
     });
   }
 
-  async generateScenario(prompt, language = "en") {
+  detectLanguage(prompt) {
+    // Simple language detection based on character patterns and common words
+    const vietnameseChars = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;
+    const vietnameseWords = /\b(gì|là|của|với|trong|một|này|đó|và|hay|thì|sẽ|đã|có|được|không|nếu|như|để|về|từ|khi|nào|tại|do|theo|qua|bằng|cho|đến|sau|trước|giữa|ngoài|trong|trên|dưới)\b/i;
+    
+    // Check for Vietnamese characters or common Vietnamese words
+    if (vietnameseChars.test(prompt) || vietnameseWords.test(prompt)) {
+      return 'vi';
+    }
+    
+    return 'en'; // Default to English
+  }
+
+  async generateScenario(prompt, language = null) {
+    // Auto-detect language if not provided
+    const detectedLanguage = language || this.detectLanguage(prompt);
     const systemPrompt =
-      language === "vi"
+      detectedLanguage === "vi"
         ? `Bạn là một AI chuyên gia phân tích khoa học và sáng tạo kịch bản. Nhiệm vụ của bạn là:
       1. Phân tích giả định một cách khoa học và logic
       2. Tạo ra một kịch bản chi tiết với chiều sâu khoa học
@@ -153,12 +168,16 @@ class AIService {
   async generateMultipleImages(imagePrompts) {
     const images = [];
 
+    // Enhanced prompt processing for better context-aware image generation
     for (let i = 0; i < imagePrompts.length; i++) {
       try {
-        const imageData = await this.generateImage(imagePrompts[i].prompt);
+        const enhancedPrompt = this.enhanceImagePrompt(imagePrompts[i].prompt, i, imagePrompts.length);
+        const imageData = await this.generateImage(enhancedPrompt);
         images.push({
           ...imageData,
           description: imagePrompts[i].description,
+          originalPrompt: imagePrompts[i].prompt,
+          enhancedPrompt: enhancedPrompt,
           index: i,
         });
 
@@ -171,6 +190,64 @@ class AIService {
     }
 
     return images;
+  }
+
+  enhanceImagePrompt(originalPrompt, index, totalImages) {
+    // Add context-specific enhancements based on image position in sequence
+    let styleModifier = '';
+    
+    switch (index) {
+      case 0:
+        styleModifier = 'establishing shot, wide angle, cinematic composition';
+        break;
+      case 1:
+        styleModifier = 'medium shot, detailed focus, dramatic lighting';
+        break;
+      case 2:
+        styleModifier = 'close-up details, high contrast, dynamic perspective';
+        break;
+      case 3:
+        styleModifier = 'epic finale shot, dramatic atmosphere, wide vista';
+        break;
+      default:
+        styleModifier = 'high quality, detailed, professional';
+    }
+
+    // Determine art style based on content analysis
+    const artStyle = this.determineArtStyle(originalPrompt);
+    
+    return `${originalPrompt}, ${styleModifier}, ${artStyle}, highly detailed, professional concept art, 8k resolution, trending on artstation`;
+  }
+
+  determineArtStyle(prompt) {
+    const prompt_lower = prompt.toLowerCase();
+    
+    // Science fiction themes
+    if (prompt_lower.includes('space') || prompt_lower.includes('alien') || 
+        prompt_lower.includes('future') || prompt_lower.includes('robot')) {
+      return 'sci-fi digital art, cyberpunk aesthetics, neon lighting';
+    }
+    
+    // Historical themes
+    if (prompt_lower.includes('ancient') || prompt_lower.includes('medieval') || 
+        prompt_lower.includes('history') || prompt_lower.includes('past')) {
+      return 'historical realism, period-accurate details, classical art style';
+    }
+    
+    // Nature/Environment themes
+    if (prompt_lower.includes('nature') || prompt_lower.includes('forest') || 
+        prompt_lower.includes('ocean') || prompt_lower.includes('mountain')) {
+      return 'photorealistic nature photography, natural lighting, environmental art';
+    }
+    
+    // Fantasy themes
+    if (prompt_lower.includes('magic') || prompt_lower.includes('fantasy') || 
+        prompt_lower.includes('dragon') || prompt_lower.includes('wizard')) {
+      return 'fantasy art, magical realism, ethereal lighting';
+    }
+    
+    // Default to realistic style
+    return 'photorealistic, natural lighting, professional photography style';
   }
 }
 

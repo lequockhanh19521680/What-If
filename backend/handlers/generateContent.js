@@ -51,7 +51,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const { prompt, language = "en", userId = null } = body;
+    const { prompt, userId = null } = body;
 
     if (!prompt) {
       return {
@@ -81,9 +81,9 @@ exports.handler = async (event) => {
 
     const projectId = uuidv4();
 
-    // Step 1: Generate scenario and image prompts using Claude
+    // Step 1: Generate scenario and image prompts using Claude (with auto-detected language)
     console.log("Generating scenario with AI...");
-    const scenarioData = await aiService.generateScenario(prompt, language);
+    const scenarioData = await aiService.generateScenario(prompt);
 
     // Step 2: Generate images using Stable Diffusion
     console.log("Generating images...");
@@ -116,7 +116,7 @@ exports.handler = async (event) => {
       projectId,
       userId,
       prompt,
-      language,
+      language: aiService.detectLanguage(prompt),
       scenario: scenarioData.scenario,
       scientificAnalysis: scenarioData.scientific_analysis,
       title: scenarioData.title,
